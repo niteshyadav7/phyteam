@@ -49,8 +49,8 @@ const PricingSection = () => {
       name: "Enterprise Package",
       description:
         "Comprehensive solution for established businesses and enterprises.",
-      // price: "₹69,999",
-      // period: "/project",
+      price: "Custom",
+      period: "",
       features: [
         "Advanced Custom Software Development",
         "Full-Stack Web & Mobile Applications",
@@ -85,7 +85,7 @@ const PricingSection = () => {
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 80,
         damping: 15,
       },

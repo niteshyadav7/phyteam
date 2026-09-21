@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback, memo } from "react";
-import Image from "next/image";
 
 const TestimonialsSection = () => {
   const [active, setActive] = useState(0);

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header"; // Header is client component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,9 +56,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black`}>
-        <Header />
-        <div className="">{children}</div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a1e2e] text-white min-h-screen`}>
+        {children}
       </body>
     </html>
   );

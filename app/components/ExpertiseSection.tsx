@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, memo } from "react";
-import { staggerContainer, staggerItem, hoverLift } from "../utils/motion";
 
 const ExpertiseSection = () => {
   const sectionRef = useRef(null);
@@ -159,7 +158,7 @@ const ExpertiseSection = () => {
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 15,
       },

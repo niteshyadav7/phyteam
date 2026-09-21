@@ -54,9 +54,7 @@ export default function Home() {
       <HeroSection />
       <ExpertiseSection />
 
-      <div id="services">
-        <WhyChooseSection />
-      </div>
+      <WhyChooseSection />
 
       <StatsSection />
       <TestimonialsSection />
@@ -67,6 +65,7 @@ export default function Home() {
 
       {/* Footer */}
       <FooterSection />
-    </main>
+    </div>
   );
 }
+

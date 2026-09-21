@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import Header from "../components/Header";
 import FooterSection from "../components/FooterSection";
+import { submitLead } from "../lib/firebase";
 
 const ContactPage = () => {
   const heroRef = useRef(null);
@@ -24,6 +25,9 @@ const ContactPage = () => {
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -36,10 +40,36 @@ const ContactPage = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    const res = await submitLead({
+      type: "contact_form",
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.company,
+      service: formData.service || "Website Development",
+      message: formData.message,
+    });
+
+    setIsSubmitting(false);
+
+    if (res.success) {
+      setIsSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+    } else {
+      setErrorMessage(res.error || "Failed to send message. Please try again.");
+    }
   };
 
   const contactInfo = [
@@ -131,7 +161,7 @@ const ContactPage = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent"
           >
-            Let's Connect
+            Let&apos;s Connect
           </motion.h1>
 
           <motion.p
@@ -140,8 +170,8 @@ const ContactPage = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-300 leading-relaxed"
           >
-            Have a project in mind? We'd love to hear from you. Send us a
-            message and we'll respond as soon as possible.
+            Have a project in mind? We&apos;d love to hear from you. Send us a
+            message and we&apos;ll respond as soon as possible.
           </motion.p>
         </motion.div>
       </section>
@@ -160,159 +190,211 @@ const ContactPage = () => {
               <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 md:p-12 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
 
-                <h2 className="text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent relative z-10">
-                  Send us a Message
-                </h2>
-
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-6 relative z-10"
-                >
-                  {/* Name */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField("name")}
-                      onBlur={() => setFocusedField(null)}
-                      className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                        focusedField === "name"
-                          ? "border-cyan-400"
-                          : "border-gray-700"
-                      } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  {/* Email & Phone */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        onFocus={() => setFocusedField("email")}
-                        onBlur={() => setFocusedField(null)}
-                        className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                          focusedField === "email"
-                            ? "border-cyan-400"
-                            : "border-gray-700"
-                        } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        onFocus={() => setFocusedField("phone")}
-                        onBlur={() => setFocusedField(null)}
-                        className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                          focusedField === "phone"
-                            ? "border-cyan-400"
-                            : "border-gray-700"
-                        } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
-                        placeholder="+1 (555) 000-0000"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Company */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Company
-                    </label>
-                    <input
-                      type="text"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField("company")}
-                      onBlur={() => setFocusedField(null)}
-                      className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                        focusedField === "company"
-                          ? "border-cyan-400"
-                          : "border-gray-700"
-                      } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
-                      placeholder="Your Company"
-                    />
-                  </div>
-
-                  {/* Service */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Service Interested In *
-                    </label>
-                    <select
-                      name="service"
-                      required
-                      value={formData.service}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField("service")}
-                      onBlur={() => setFocusedField(null)}
-                      className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                        focusedField === "service"
-                          ? "border-cyan-400"
-                          : "border-gray-700"
-                      } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white cursor-pointer`}
-                    >
-                      <option value="">Select a service</option>
-                      {services.map((service, index) => (
-                        <option key={index} value={service}>
-                          {service}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Message *
-                    </label>
-                    <textarea
-                      name="message"
-                      required
-                      value={formData.message}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField("message")}
-                      onBlur={() => setFocusedField(null)}
-                      rows={5}
-                      className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                        focusedField === "message"
-                          ? "border-cyan-400"
-                          : "border-gray-700"
-                      } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 resize-none text-white placeholder-gray-500 cursor-text`}
-                      placeholder="Tell us about your project..."
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 cursor-pointer"
+                {isSubmitted ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-12 relative z-10"
                   >
-                    Send Message
-                  </motion.button>
-                </form>
+                    <div className="w-20 h-20 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-cyan-500/30">
+                      <svg
+                        className="w-10 h-10 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <h2 className="text-3xl font-bold text-white mb-3">
+                      Message Sent Successfully!
+                    </h2>
+                    <p className="text-gray-300 max-w-md mx-auto mb-8 leading-relaxed">
+                      Thank you for contacting Phyteam. We have received your project details and an advisor will reach out to you within 24 hours.
+                    </p>
+                    <button
+                      onClick={() => setIsSubmitted(false)}
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold px-8 py-3.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/40 transition-all cursor-pointer"
+                    >
+                      Send Another Message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent relative z-10">
+                      Send us a Message
+                    </h2>
+
+                    {errorMessage && (
+                      <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    <form
+                      onSubmit={handleSubmit}
+                      className="space-y-6 relative z-10"
+                    >
+                      {/* Name */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          onFocus={() => setFocusedField("name")}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                            focusedField === "name"
+                              ? "border-cyan-400"
+                              : "border-gray-700"
+                          } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
+                          placeholder="John Doe"
+                        />
+                      </div>
+
+                      {/* Email & Phone */}
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Email *
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            onFocus={() => setFocusedField("email")}
+                            onBlur={() => setFocusedField(null)}
+                            className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                              focusedField === "email"
+                                ? "border-cyan-400"
+                                : "border-gray-700"
+                            } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
+                            placeholder="john@example.com"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Phone
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            onFocus={() => setFocusedField("phone")}
+                            onBlur={() => setFocusedField(null)}
+                            className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                              focusedField === "phone"
+                                ? "border-cyan-400"
+                                : "border-gray-700"
+                            } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
+                            placeholder="+91 98765 43210"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Company */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Company
+                        </label>
+                        <input
+                          type="text"
+                          name="company"
+                          value={formData.company}
+                          onChange={handleChange}
+                          onFocus={() => setFocusedField("company")}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                            focusedField === "company"
+                              ? "border-cyan-400"
+                              : "border-gray-700"
+                          } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white placeholder-gray-500 cursor-text`}
+                          placeholder="Your Company"
+                        />
+                      </div>
+
+                      {/* Service */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Service Interested In *
+                        </label>
+                        <select
+                          name="service"
+                          required
+                          value={formData.service}
+                          onChange={handleChange}
+                          onFocus={() => setFocusedField("service")}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                            focusedField === "service"
+                              ? "border-cyan-400"
+                              : "border-gray-700"
+                          } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 text-white cursor-pointer`}
+                        >
+                          <option value="">Select a service</option>
+                          {services.map((service, index) => (
+                            <option key={index} value={service} className="bg-gray-900">
+                              {service}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Message */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Message *
+                        </label>
+                        <textarea
+                          name="message"
+                          required
+                          value={formData.message}
+                          onChange={handleChange}
+                          onFocus={() => setFocusedField("message")}
+                          onBlur={() => setFocusedField(null)}
+                          rows={5}
+                          className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                            focusedField === "message"
+                              ? "border-cyan-400"
+                              : "border-gray-700"
+                          } rounded-xl focus:outline-none focus:border-cyan-400 transition-all duration-300 resize-none text-white placeholder-gray-500 cursor-text`}
+                          placeholder="Tell us about your project..."
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <motion.button
+                        type="submit"
+                        disabled={isSubmitting}
+                        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Sending Message...</span>
+                          </>
+                        ) : (
+                          <span>Send Message</span>
+                        )}
+                      </motion.button>
+                    </form>
+                  </>
+                )}
               </div>
             </motion.div>
 
@@ -329,8 +411,8 @@ const ContactPage = () => {
                   Get in Touch
                 </h2>
                 <p className="text-gray-400 text-lg leading-relaxed">
-                  We're here to answer any questions you may have about our
-                  services. Reach out to us and we'll respond as soon as we can.
+                  We&apos;re here to answer any questions you may have about our
+                  services. Reach out to us and we&apos;ll respond as soon as we can.
                 </p>
               </div>
 
