@@ -15,13 +15,36 @@ const ContactPage = () => {
   const isFormInView = useInView(formRef, { once: true, amount: 0.1 });
   const isInfoInView = useInView(infoRef, { once: true, amount: 0.15 });
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    phone: "",
-    service: "",
-    message: "",
+  const [formData, setFormData] = useState(() => {
+    let initialService = "";
+    let initialMessage = "";
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const planParam = params.get("plan");
+      if (planParam) {
+        const lower = planParam.toLowerCase();
+        if (lower.includes("starter")) {
+          initialService = "Starter Package (₹999/mo)";
+          initialMessage = "Hi Phyteam, I'm interested in getting started with the Starter Package (₹999/mo). Let's connect on next steps.";
+        } else if (lower.includes("business")) {
+          initialService = "Business Growth Package (₹2,999/mo)";
+          initialMessage = "Hi Phyteam, I'd like to sign up for the Business Growth Package (₹2,999/mo). Please reach out to schedule our kick-off.";
+        } else if (lower.includes("enterprise")) {
+          initialService = "Enterprise / Custom Package";
+          initialMessage = "Hi Phyteam, we have custom technical and PR requirements. We'd like to schedule an enterprise consultation.";
+        }
+      }
+    }
+
+    return {
+      name: "",
+      email: "",
+      company: "",
+      phone: "",
+      service: initialService,
+      message: initialMessage,
+    };
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -104,6 +127,9 @@ const ContactPage = () => {
   ];
 
   const services = [
+    "Starter Package (₹999/mo)",
+    "Business Growth Package (₹2,999/mo)",
+    "Enterprise / Custom Package",
     "Website Development",
     "Custom Software Development",
     "Mobile App Development",

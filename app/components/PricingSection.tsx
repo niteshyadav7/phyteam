@@ -3,67 +3,113 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, memo } from "react";
 import Link from "next/link";
+import {
+  Check,
+  Sparkles,
+  Zap,
+  ShieldCheck,
+  ArrowRight,
+  Star,
+  PhoneCall,
+} from "lucide-react";
 
 const PricingSection = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
-  const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const [isYearly, setIsYearly] = useState(false);
 
   const plans = [
     {
+      id: "starter",
       name: "Starter Package",
-      description: "Perfect for startups and small businesses getting started.",
-      price: "₹14,999",
-      period: "/project",
-      features: [
-        "Responsive Website (5-8 pages)",
-        "Basic SEO Setup",
-        "Mobile App (Single Platform)",
-        "1 Months Free Maintenance",
-        "Social Media Integration",
-      ],
-      buttonText: "Get Started",
-      buttonStyle: "bg-gray-800 text-white hover:bg-gray-700",
-      popular: false,
-      gradient: "from-gray-800 to-gray-900",
-    },
-    {
-      name: "Business Package",
-      description: "For growing businesses ready to scale digitally.",
-      price: "₹29,999",
-      period: "/project",
-      features: [
-        "Custom Website Development (10-15 pages)",
-        "iOS & Android Mobile App",
-        "Complete SEO & Digital Marketing",
-        "Data Analytics & AI Integration",
-        "3 Months Free Support",
-        "Priority Customer Service",
-      ],
-      buttonText: "Most Popular",
-      buttonStyle: "bg-white text-black hover:bg-gray-100",
-      popular: true,
-      gradient: "from-cyan-600 to-blue-600",
-    },
-    {
-      name: "Enterprise Package",
+      badge: "50% OFF LAUNCH OFFER",
+      badgeColor: "from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-400/30",
       description:
-        "Comprehensive solution for established businesses and enterprises.",
-      price: "Custom",
-      period: "",
+        "Essential digital foundation for solo founders, creators, and new businesses looking to launch quickly.",
+      monthlyPrice: "₹999",
+      yearlyPrice: "₹799",
+      originalPrice: "₹1,999",
+      period: "/month",
+      billingNote: isYearly ? "Billed annually (Save ₹2,400/yr)" : "Flexible monthly billing",
       features: [
-        "Advanced Custom Software Development",
-        "Full-Stack Web & Mobile Applications",
-        "AI & Machine Learning Solutions",
-        "Complete Digital Marketing Campaign",
-        "Dedicated Account Manager",
-        "Upto 12 Months Premium Support",
-        "Scalable Cloud Infrastructure",
+        "1-Page High-Converting Landing Page",
+        "Essential SEO & Google Search Indexing",
+        "WhatsApp & Direct Contact Capture",
+        "High-Speed Cloud Hosting & Free SSL",
+        "Social Media & Link-in-Bio Setup",
+        "1 Month Free Technical Support",
       ],
-      buttonText: "Contact Sales",
-      buttonStyle: "bg-gray-800 text-white hover:bg-gray-700",
+      notIncluded: [
+        "Multi-Page Architecture",
+        "Custom Mobile Application",
+        "Dedicated Tech Lead",
+      ],
+      ctaText: isYearly ? "Get Started (₹799/mo)" : "Get Started (₹999/mo)",
+      ctaLink: "/contact?plan=Starter%20Package",
       popular: false,
-      gradient: "from-gray-800 to-gray-900",
+      cardBorder: "border-[#1c2c48] hover:border-cyan-500/50",
+      glowColor: "from-cyan-500/10 via-blue-500/5 to-transparent",
+      accentColor: "cyan",
+    },
+    {
+      id: "business",
+      name: "Business Growth",
+      badge: "⭐ MOST POPULAR • BEST VALUE",
+      badgeColor: "from-cyan-500 via-blue-500 to-purple-600 text-white shadow-lg shadow-cyan-500/30",
+      description:
+        "Engineered for scaling brands and businesses seeking higher visibility, consistent leads, and speed.",
+      monthlyPrice: "₹2,999",
+      yearlyPrice: "₹2,399",
+      originalPrice: "₹5,999",
+      period: "/month",
+      billingNote: isYearly ? "Billed annually (Save ₹7,200/yr)" : "No lock-in • Cancel anytime",
+      features: [
+        "Up to 5 Pages Custom UI/UX Web System",
+        "Full On-Page & Local SEO Strategy",
+        "Integrated Booking & Firebase CRM Flow",
+        "Strategic PR & Media Pitching Integration",
+        "95+ Core Web Vitals Speed Optimization",
+        "Priority 24/7 WhatsApp & Email Support",
+        "3 Months Free Maintenance & Iterations",
+      ],
+      notIncluded: [
+        "Native iOS & Android Mobile Apps",
+      ],
+      ctaText: isYearly ? "Claim Business Plan (₹2,399/mo)" : "Claim Business Plan (₹2,999/mo)",
+      ctaLink: "/contact?plan=Business%20Package",
+      popular: true,
+      cardBorder: "border-cyan-400/60 shadow-[0_0_50px_rgba(6,182,212,0.25)]",
+      glowColor: "from-cyan-500/25 via-blue-500/20 to-purple-500/15",
+      accentColor: "blue",
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise & Bespoke",
+      badge: "💎 100% CUSTOMIZABLE",
+      badgeColor: "from-purple-500/20 to-pink-500/20 text-purple-300 border-purple-400/30",
+      description:
+        "Full-stack custom software, cross-platform mobile apps, AI automation, and strategic PR architecture.",
+      monthlyPrice: "Custom",
+      yearlyPrice: "Custom",
+      originalPrice: "",
+      period: "",
+      billingNote: "Milestone-based or dedicated team retainer",
+      features: [
+        "Full-Stack Web & SaaS Platform Development",
+        "Native iOS & Android Mobile Apps",
+        "Custom Backend, CRM & Secure REST APIs",
+        "AI Workflows, Automation & Chatbots",
+        "Nationwide Strategic PR & Media Outreach",
+        "Dedicated Tech Lead & Solutions Architect",
+        "Up to 12 Months Premium Enterprise SLA",
+      ],
+      notIncluded: [],
+      ctaText: "Schedule Custom Consultation",
+      ctaLink: "/contact?plan=Enterprise%20Package",
+      popular: false,
+      cardBorder: "border-[#1c2c48] hover:border-purple-500/50",
+      glowColor: "from-purple-500/10 via-pink-500/5 to-transparent",
+      accentColor: "purple",
     },
   ];
 
@@ -72,22 +118,21 @@ const PricingSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
       },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 60, scale: 0.9 },
+    hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
         type: "spring" as const,
-        stiffness: 80,
-        damping: 15,
+        stiffness: 90,
+        damping: 18,
       },
     },
   };
@@ -95,283 +140,288 @@ const PricingSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 px-6 bg-gradient-to-b from-black via-[#0a1520] to-[#0a1e2e] overflow-hidden"
+      id="pricing"
+      className="relative py-32 px-6 bg-gradient-to-b from-black via-[#06101c] to-[#081526] overflow-hidden"
     >
-      {/* Animated curved background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.svg
-          className="absolute bottom-0 left-0 w-full"
-          viewBox="0 0 1440 400"
-          preserveAspectRatio="none"
-          style={{ height: "60%" }}
-        >
-          <motion.path
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={isInView ? { pathLength: 1, opacity: 0.3 } : {}}
-            transition={{ duration: 2, ease: "easeInOut" }}
-            fill="url(#pricingGradient)"
-            d="M0,256 C320,192 420,288 720,256 C1020,224 1120,320 1440,288 L1440,400 L0,400 Z"
-          />
-          <defs>
-            <linearGradient
-              id="pricingGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%"
-            >
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.2" />
-            </linearGradient>
-          </defs>
-        </motion.svg>
-      </div>
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-20 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Floating particles disabled for performance */}
+      {/* Grid line pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Title */}
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <motion.p
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-cyan-400 text-sm uppercase tracking-[0.3em] mb-4 font-semibold"
-          >
-            Pricing
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-6xl font-bold mb-6"
-          >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
-              Flexible Pricing
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-400/30 mb-5 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span>TRANSPARENT & ACCESSIBLE PRICING</span>
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-gray-300">
+              High-Impact Digital Solutions,
             </span>
             <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
-              for Every Business
+              Priced to Scale With You.
             </span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-gray-400 text-lg max-w-2xl mx-auto"
-          >
-            Choose a plan that fits your needs. From startups to enterprises, we
-            have solutions for everyone.
-          </motion.p>
+          </h2>
+
+          <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            From quick online launches to full-scale digital infrastructure. Start small,
+            upgrade anytime, and never pay for features you don&apos;t need.
+          </p>
+
+          {/* Billing Cycle Toggle */}
+          <div className="mt-10 flex items-center justify-center">
+            <div className="relative flex items-center bg-[#0d1a2d] border border-[#1d2f4d] p-1.5 rounded-full shadow-inner">
+              <button
+                type="button"
+                onClick={() => setIsYearly(false)}
+                className={`relative z-10 px-5 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 cursor-pointer ${
+                  !isYearly ? "text-white shadow-md" : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                {!isYearly && (
+                  <motion.div
+                    layoutId="pricing-billing-pill"
+                    className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full shadow-lg shadow-cyan-500/25"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">Monthly Billing</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsYearly(true)}
+                className={`relative z-10 px-5 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-300 cursor-pointer flex items-center gap-2 ${
+                  isYearly ? "text-white shadow-md" : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                {isYearly && (
+                  <motion.div
+                    layoutId="pricing-billing-pill"
+                    className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full shadow-lg shadow-cyan-500/25"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">Yearly Billing</span>
+                <span className="relative z-10 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 px-2 py-0.5 rounded-full animate-pulse">
+                  SAVE 20%
+                </span>
+              </button>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Pricing Cards */}
+        {/* Pricing Cards Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch"
         >
-          {plans.map((plan, index) => (
-            <motion.div
-              key={index}
-              variants={cardVariants}
-              whileHover={{
-                scale: plan.popular ? 1.03 : 1.05,
-                y: -10,
-              }}
-              onHoverStart={() => setHoveredPlan(index)}
-              onHoverEnd={() => setHoveredPlan(null)}
-              className={`group relative ${
-                plan.popular ? "lg:-mt-4 lg:mb-4" : ""
-              }`}
-            >
-              {/* Popular badge */}
-              {plan.popular && (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                  className="absolute -top-4 right-6 z-20"
-                >
-                  <div className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg">
-                    <motion.span
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      ⭐
-                    </motion.span>
-                    Popular
-                  </div>
-                </motion.div>
-              )}
+          {plans.map((plan) => {
+            const currentPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
 
-              {/* Glow effect */}
+            return (
               <motion.div
-                className={`absolute -inset-1 bg-gradient-to-r ${
-                  plan.gradient
-                } rounded-[2rem] opacity-0 group-hover:opacity-${
-                  plan.popular ? "100" : "50"
-                } blur-2xl transition-opacity duration-500`}
-              />
-
-              {/* Card */}
-              <div
-                className={`relative bg-gradient-to-br ${
+                key={plan.id}
+                variants={cardVariants}
+                whileHover={{ y: -8 }}
+                className={`relative flex flex-col justify-between rounded-3xl p-8 transition-all duration-500 ${
                   plan.popular
-                    ? "from-[#1a3040] to-[#0f1e2e] border-cyan-500/50"
-                    : "from-[#1a2332] to-[#0f1820] border-gray-800/50"
-                } backdrop-blur-xl border-2 rounded-[2rem] p-8 h-full overflow-hidden transition-colors duration-500`}
+                    ? "bg-gradient-to-b from-[#0e223d] to-[#081526] lg:-translate-y-4"
+                    : "bg-gradient-to-b from-[#0c182a]/90 to-[#07111e]/90"
+                } border ${plan.cardBorder} backdrop-blur-xl group`}
               >
-                {/* Animated background gradient */}
+                {/* Popular Card Ambient Aura */}
                 {plan.popular && (
-                  <motion.div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition duration-500 pointer-events-none -z-10" />
                 )}
 
-                {/* Shimmer effect */}
-                <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={
-                    hoveredPlan === index ? { x: "200%" } : { x: "-100%" }
-                  }
-                  transition={{ duration: 1, ease: "easeInOut" }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                />
+                {/* Popular Floating Badge */}
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30">
+                      <Star className="w-3.5 h-3.5 fill-white text-white animate-spin" style={{ animationDuration: "8s" }} />
+                      Most Popular
+                    </span>
+                  </div>
+                )}
 
-                <div className="relative z-10">
-                  {/* Plan name & description */}
-                  <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-cyan-100 transition-colors">
+                {/* Top Part: Title, Badge, Description, Price */}
+                <div>
+                  <div className="flex items-center justify-between gap-3 mb-4">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold border uppercase tracking-wider ${plan.badgeColor}`}
+                    >
+                      {plan.badge}
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-white mb-2 tracking-tight group-hover:text-cyan-200 transition-colors">
                     {plan.name}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-6 leading-relaxed group-hover:text-gray-300 transition-colors">
+
+                  <p className="text-xs md:text-sm text-gray-400 mb-6 leading-relaxed min-h-[44px]">
                     {plan.description}
                   </p>
 
-                  {/* Price */}
-                  <div className="mb-8">
-                    <motion.div
-                      className="flex items-baseline gap-1"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <span
-                        className={`text-5xl font-bold ${
-                          plan.popular
-                            ? "bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400"
-                            : "text-white"
-                        }`}
-                      >
-                        {plan.price}
+                  {/* Price Section */}
+                  <div className="py-5 border-y border-[#182944] mb-6">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl md:text-5xl font-black text-white tracking-tight">
+                        {currentPrice}
                       </span>
-                      <span className="text-gray-400 text-lg">
+                      {plan.originalPrice && (
+                        <span className="text-base text-gray-500 line-through font-semibold">
+                          {plan.originalPrice}
+                        </span>
+                      )}
+                      <span className="text-sm font-semibold text-cyan-400">
                         {plan.period}
                       </span>
-                    </motion.div>
+                    </div>
+                    <p className="text-[11px] text-gray-400 mt-1 font-medium">
+                      {plan.billingNote}
+                    </p>
                   </div>
 
-                  {/* Features list */}
-                  <ul className="space-y-4 mb-8">
-                    {plan.features.map((feature, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.5 + index * 0.2 + i * 0.1 }}
-                        className="flex items-start gap-3 text-gray-300 text-sm group-hover:text-white transition-colors"
-                      >
-                        <motion.svg
-                          whileHover={{ scale: 1.3, rotate: 360 }}
-                          className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                            plan.popular ? "text-cyan-400" : "text-gray-400"
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </motion.svg>
-                        <span>{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                  {/* Feature list */}
+                  <div className="mb-8">
+                    <div className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>What&apos;s Included:</span>
+                    </div>
 
-                  {/* CTA Button */}
-                  <Link href="/contact">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`w-full ${plan.buttonStyle} px-6 py-4 rounded-full font-semibold text-sm transition-all duration-300 relative overflow-hidden group/btn cursor-pointer`}
-                    >
-                      <motion.div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover/btn:opacity-20 transition-opacity" />
-                      <span className="relative z-10">{plan.buttonText}</span>
-                    </motion.button>
-                  </Link>
+                    <ul className="space-y-3">
+                      {plan.features.map((feature, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-3 text-xs md:text-sm text-gray-200"
+                        >
+                          <div
+                            className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              plan.popular
+                                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40"
+                                : "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30"
+                            }`}
+                          >
+                            <Check className="w-3 h-3" />
+                          </div>
+                          <span className="leading-tight">{feature}</span>
+                        </li>
+                      ))}
+
+                      {/* Not included items (gives contrast) */}
+                      {plan.notIncluded.map((item, i) => (
+                        <li
+                          key={`not-${i}`}
+                          className="flex items-start gap-3 text-xs md:text-sm text-gray-500"
+                        >
+                          <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-gray-800/40 text-gray-600 border border-gray-700/40">
+                            <span className="text-xs">✕</span>
+                          </div>
+                          <span className="line-through">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                {/* Decorative corner elements */}
-                <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-gray-700/30 group-hover:border-cyan-400/50 rounded-tr-2xl transition-colors" />
-                <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-gray-700/30 group-hover:border-cyan-400/50 rounded-bl-2xl transition-colors" />
+                {/* Bottom CTA Button */}
+                <div className="pt-4 mt-auto">
+                  <Link href={plan.ctaLink} className="block w-full">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`w-full py-4 px-6 rounded-2xl font-bold text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                        plan.popular
+                          ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:brightness-110"
+                          : "bg-[#112239] hover:bg-[#182f4e] text-white border border-[#22395d] hover:border-cyan-400/40"
+                      }`}
+                    >
+                      <span>{plan.ctaText}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </motion.button>
+                  </Link>
 
-                {/* Floating sparkles on hover */}
-                {[...Array(4)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileHover={{
-                      opacity: [0, 1, 0],
-                      scale: [0, 1, 0],
-                      y: [0, -30],
-                      x: [0, (i - 1.5) * 15],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.2,
-                    }}
-                    className={`absolute bottom-20 left-1/2 w-1.5 h-1.5 ${
-                      plan.popular ? "bg-cyan-400" : "bg-gray-400"
-                    } rounded-full`}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                  <p className="text-[11px] text-center text-gray-500 mt-2.5">
+                    {plan.id === "enterprise"
+                      ? "Custom contract & scope proposal in 24h"
+                      : "Immediate onboarding • No hidden setup costs"}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
-        {/* Additional CTA */}
+        {/* Bottom Trust & Assurance Strip */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="text-center mt-16"
+          transition={{ delay: 0.8, duration: 0.7 }}
+          className="mt-20 pt-10 border-t border-[#122238] grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left"
         >
-          <p className="text-gray-400 mb-4">
-            Need a custom enterprise solution?
-          </p>
-          <Link href="/contact">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="border-2 border-cyan-500/50 text-cyan-400 px-8 py-3 rounded-full font-semibold hover:bg-cyan-500/10 transition-all duration-300 cursor-pointer"
-            >
-              Contact Sales
-            </motion.button>
-          </Link>
+          <div className="flex items-center justify-center md:justify-start gap-3.5 p-4 rounded-2xl bg-[#0b1728]/60 border border-[#172942]">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400 border border-cyan-400/30 flex-shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white">100% Transparent Terms</div>
+              <div className="text-xs text-gray-400">Fixed milestones with zero hidden fees.</div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-start gap-3.5 p-4 rounded-2xl bg-[#0b1728]/60 border border-[#172942]">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/15 flex items-center justify-center text-blue-400 border border-blue-400/30 flex-shrink-0">
+              <Zap className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white">Fast Turnaround</div>
+              <div className="text-xs text-gray-400">Launch in days, not months.</div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-start gap-3.5 p-4 rounded-2xl bg-[#0b1728]/60 border border-[#172942]">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400 border border-purple-400/30 flex-shrink-0">
+              <PhoneCall className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white">Direct Developer Access</div>
+              <div className="text-xs text-gray-400">Instant WhatsApp & email support.</div>
+            </div>
+          </div>
         </motion.div>
+
+        {/* Custom Consultation Callout */}
+        <div className="text-center mt-12">
+          <p className="text-gray-400 text-sm">
+            Looking for something tailored or have complex technical requirements?{" "}
+            <Link
+              href="/contact"
+              className="text-cyan-400 hover:text-cyan-300 font-bold underline underline-offset-4 cursor-pointer"
+            >
+              Talk to our tech leads directly →
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );
